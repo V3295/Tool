@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Compress images online with adjustable quality levels. Fast, responsive, and optimized for SEO. Ideal for web developers and designers." />
+  <meta name="keywords" content="image compression, optimize images, online image compressor, reduce image size" />
+  <meta name="author" content="Your Name" />
+  <title>Online Image Compression Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #03b7f3;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type="file"] {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    #output {
+      margin-top: 1rem;
+    }
+    .ad-space {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <h1>Image Compression Tool</h1>
+    <p>Compress your images online with adjustable quality</p>
+  </header>
+  <main>
+    <label for="file">Select an image:</label>
+    <input type="file" id="file" accept="image/*">
+
+    <label for="quality">Select Compression Quality:</label>
+    <input type="range" id="quality" min="10" max="100" value="70">
+    <span id="qualityValue">70%</span>
+
+    <button onclick="compressImage()">Compress Image</button>
+
+    <div id="output"></div>
+
+    <div class="ad-space">
+      <!-- Google AdSense Placeholder -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </main>
+  <script>
+    const fileInput = document.getElementById('file');
+    const qualitySlider = document.getElementById('quality');
+    const qualityValue = document.getElementById('qualityValue');
+    const output = document.getElementById('output');
+
+    qualitySlider.addEventListener('input', () => {
+      qualityValue.textContent = qualitySlider.value + '%';
+    });
+
+    function compressImage() {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select an image first.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          const quality = parseInt(qualitySlider.value, 10) / 100;
+          canvas.toBlob(function (blob) {
+            const url = URL.createObjectURL(blob);
+            output.innerHTML = `
+              <h3>Compressed Image:</h3>
+              <a href="${url}" download="compressed.jpg">Download</a>
+              <br>
+              <img src="${url}" style="max-width:100%;margin-top:1rem;">
+            `;
+          }, 'image/jpeg', quality);
+        };
+      };
+    }
+  </script>
+</body>
+</html>
